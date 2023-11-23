@@ -36,10 +36,17 @@ Pager is responsible for reading and writing. We will write data in memory in pa
 
 The B-tree nodes are the pages. It can retrieve and save pages from and to disks by issuing commands to pager.
 
-The os iterface as the name suggests works on operating system. 
+The os interface as the name suggests works on operating system. 
 
 
 ## Step 2: Making a REPL
 
 Here we will create a simple c code to take an input from user, then compare it with some string to print or exit
 
+## Step 3: Adding simple SQL
+
+In this stage we will identify and validate different SQL and parse them
+
+## Step 4: Creating a very basic in memory table
+
+In this stage we will create a very simple DB with one table. It will only support select and insert and the data will be in memory.
