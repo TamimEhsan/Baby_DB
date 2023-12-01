@@ -2,7 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+
+
 #include "table.h"
+
 
 
 typedef struct {
@@ -72,7 +77,7 @@ void close_input_buffer(InputBuffer* input_buffer) {
 MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table) {
     if ( strcmp(input_buffer->buffer, ".exit") == 0 ) {
         close_input_buffer(input_buffer);
-        free_table(table);
+        db_close(table);
         exit(EXIT_SUCCESS);
     } else {
         return META_COMMAND_UNRECOGNIZED_COMMAND;
@@ -109,7 +114,7 @@ ExecuteResult execute_insert(Statement* statement, Table* table) {
         return EXECUTE_TABLE_FULL;
     }
     Row* row_to_insert = &(statement->row_to_insert);
-    serialize_row(row_to_insert, row_slot(table,table->num_rows));
+    serialize_row(row_to_insert, get_row_slot_position(table,table->num_rows));
     table->num_rows += 1;
     return EXECUTE_SUCCESS;
 }
@@ -117,7 +122,7 @@ ExecuteResult execute_insert(Statement* statement, Table* table) {
 ExecuteResult execute_select(Statement* statement, Table* table) {
     Row row;
     for (uint32_t i = 0; i < table->num_rows; i++) {
-        deserialize_row(row_slot(table,i), &row);
+        deserialize_row(get_row_slot_position(table,i), &row);
         print_row(&row);
     }
     return EXECUTE_SUCCESS;
@@ -157,7 +162,10 @@ void read_input(InputBuffer* input_buffer) {
 
 
 int main() {
-    Table* table = new_table();
+
+    char* filename = "db.db";
+
+    Table* table = db_open(filename);
     InputBuffer* input_buffer = new_input_buffer();
     while (true) {
 

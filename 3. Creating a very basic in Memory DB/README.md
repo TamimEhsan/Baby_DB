@@ -31,6 +31,6 @@ We save the rows in memory pages. We declare 100 pages of 4KB size. and each pag
 To compile and run
 
 ```bash
- g++ table.h main.c && ./a.out 
+ g++ main.c && ./a.out 
 ```
 
